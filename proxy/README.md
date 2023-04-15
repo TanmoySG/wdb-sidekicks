@@ -14,6 +14,6 @@ This service is built with python flask web service that required 3 configuratio
 
 Refer to the sample environment file [here](./.env).
 
-## Use Cases
+## Architecture
 
-
+![](docs/wdb-proxy.jpg)
