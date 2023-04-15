@@ -1,14 +1,16 @@
-from dotenv import load_dotenv  # pip package python-dotenv
 import os
-#
 from flask import Flask, request, Response
-import requests  # pip package requests
+from dotenv import load_dotenv
+import requests
 
 userAgentHeaderKey = "User-Agent"
 
 load_dotenv()
-FORWARDED_TO = os.environ.get('FORWARDED_TO')
+
+# configurations loaded from environment variables
+FORWARD_TO = os.environ.get('FORWARD_TO')
 PROXY_APPLICATION = os.environ.get('PROXY_APPLICATION')
+PROXY_PORT = os.environ.get('PROXY_PORT')
 
 proxyApplicationMessage = f'forwarded by proxy {PROXY_APPLICATION}'
 
@@ -34,7 +36,7 @@ def redirect_to_API_HOST(path):
 
     res = requests.request(
         method=request.method,
-        url=request.url.replace(request.host_url, f'{FORWARDED_TO}/'),
+        url=request.url.replace(request.host_url, f'{FORWARD_TO}/'),
         headers=requestHeaders,
         data=request.get_data(),
         allow_redirects=False,
@@ -50,5 +52,5 @@ def redirect_to_API_HOST(path):
     return response
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+if __name__ == "__main__":
+    app.run(port=PROXY_PORT)
