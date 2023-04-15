@@ -5,13 +5,12 @@ from flask import Flask, request, Response
 import requests  # pip package requests
 
 userAgentHeaderKey = "User-Agent"
-proxyApplication = "wdb-proxy"
-
-proxyApplicationMessage = f'forwarded by proxy {proxyApplication}'
 
 load_dotenv()
-API_HOST = os.environ.get('FORWARDED_TO')
-assert API_HOST, 'Envvar API_HOST is required'
+FORWARDED_TO = os.environ.get('FORWARDED_TO')
+PROXY_APPLICATION = os.environ.get('PROXY_APPLICATION')
+
+proxyApplicationMessage = f'forwarded by proxy {PROXY_APPLICATION}'
 
 app = Flask(__name__)
 
@@ -35,7 +34,7 @@ def redirect_to_API_HOST(path):
 
     res = requests.request(
         method=request.method,
-        url=request.url.replace(request.host_url, f'{API_HOST}/'),
+        url=request.url.replace(request.host_url, f'{FORWARDED_TO}/'),
         headers=requestHeaders,
         data=request.get_data(),
         allow_redirects=False,
