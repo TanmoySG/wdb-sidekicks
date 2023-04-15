@@ -17,4 +17,4 @@ Refer to the sample environment file [here](./.env).
 
 ## Architecture
 
-![proxy-acrch](docs/wdb-proxy.jpg)
+![proxy-acrch](./docs/wdb-proxy.png)
