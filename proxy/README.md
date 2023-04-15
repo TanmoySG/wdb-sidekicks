@@ -8,12 +8,13 @@ This service is built with python flask web service that required 3 configuratio
 
 | Variable Name | Description | Value |
 | ------------- | ----------- | ----- |
-| FORWARD_TO  | Address/URL of the wdb instance to forward request to. | http://localhost:8080 |
+| FORWARD_TO_HOST  | Address/URL of the wdb instance HOST to forward request to. | <http://localhost:8080> |
 | PROXY_APPLICATION | Name/Identifier of the proxy service | wunder-proxy |
 | PROXY_PORT | Port on which the flask app should run | 5001 |
+| REMOVE_HOST_PATH | Sub-route to remove from URL along with proxy host address | `v1/` |
 
 Refer to the sample environment file [here](./.env).
 
 ## Architecture
 
-![](docs/wdb-proxy.jpg)
+![proxy-acrch](docs/wdb-proxy.jpg)
