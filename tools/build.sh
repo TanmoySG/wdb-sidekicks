@@ -8,6 +8,6 @@ parent_path=$(
 for d in $parent_path/*/; do
     if [ -e $d/go.mod ]; then
         tool_name=$(basename $d)
-        go build -o tools/bin/${tool_name} $d/${tool_name}.go
+        GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o tools/bin/${tool_name} $d/${tool_name}.go
     fi
 done
