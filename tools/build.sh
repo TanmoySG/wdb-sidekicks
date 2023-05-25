@@ -5,7 +5,7 @@ parent_path=$(
     pwd -P
 )
 
-for d in $parent_path/*/; do
+for d in ${parent_path}/*/; do
     if [ -e $d/go.mod ]; then
         tool_name=$(basename $d)
         GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o tools/bin/${tool_name} $d/${tool_name}.go
