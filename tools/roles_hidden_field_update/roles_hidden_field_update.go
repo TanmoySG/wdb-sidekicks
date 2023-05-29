@@ -19,26 +19,41 @@ func main() {
 		os.Exit(1)
 	}
 
-	rolesJsonString := os.Args[1]
-	rolesHiddenFieldSetValue := os.Args[2]
+	var filepath, rolesJsonString, rolesHiddenFieldSetValue string
+
+	flag := os.Args[1]
+	if flag == "-f" {
+		filepath = os.Args[2]
+		fileContentBytes, err := os.ReadFile(filepath)
+		if err != nil {
+			log.Fatalf("failed to parse bool: %s", err)
+		}
+		rolesJsonString = string(fileContentBytes)
+		rolesHiddenFieldSetValue = os.Args[3]
+
+	} else {
+		rolesJsonString = os.Args[1]
+		rolesHiddenFieldSetValue = os.Args[2]
+	}
+
 	rolesHiddenFieldSetValueBool, err := strconv.ParseBool(rolesHiddenFieldSetValue)
 	if err != nil {
 		log.Fatalf("failed to parse bool: %s", err)
 	}
 
-	var parsedJsonMap map[string]interface{}
-	err = json.Unmarshal([]byte(rolesJsonString), &parsedJsonMap)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	parsedJsonMap := parseJson(rolesJsonString)
 	mutatedJsonMap := mutate(parsedJsonMap, rolesHiddenFieldSetValueBool)
-	mutatedJsonString, err := json.Marshal(mutatedJsonMap)
-	if err != nil {
-		log.Fatal(err)
+
+	if flag == "-f" {
+		saveToFile(mutatedJsonMap, filepath)
+	} else {
+		mutatedJsonString, err := json.Marshal(mutatedJsonMap)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(mutatedJsonString))
 	}
 
-	fmt.Println(string(mutatedJsonString))
 }
 
 func mutate(roles map[string]interface{}, setArg bool) map[string]interface{} {
@@ -49,4 +64,26 @@ func mutate(roles map[string]interface{}, setArg bool) map[string]interface{} {
 	}
 
 	return roles
+}
+
+func parseJson(jsonString string) map[string]interface{} {
+	var parsedJsonMap map[string]interface{}
+	err := json.Unmarshal([]byte(jsonString), &parsedJsonMap)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return parsedJsonMap
+}
+
+func saveToFile(jsonMap map[string]interface{}, jsonFilepath string) {
+	jsonBytes, err := json.Marshal(jsonMap)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.WriteFile(jsonFilepath, jsonBytes, 0740)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
