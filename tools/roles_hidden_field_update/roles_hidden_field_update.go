@@ -26,7 +26,7 @@ func main() {
 		filepath = os.Args[2]
 		fileContentBytes, err := os.ReadFile(filepath)
 		if err != nil {
-			log.Fatalf("failed to parse bool: %s", err)
+			log.Fatalf("failed to read file: %s", err)
 		}
 		rolesJsonString = string(fileContentBytes)
 		rolesHiddenFieldSetValue = os.Args[3]
