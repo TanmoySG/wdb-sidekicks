@@ -1,0 +1,6 @@
+go 1.20
+
+use (
+	./tools/migrate_databases_primary_key
+	./tools/roles_hidden_field_update
+)
